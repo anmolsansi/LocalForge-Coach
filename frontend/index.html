@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LocalForge Coach</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="orb orb--one" aria-hidden="true"></div>
+    <div class="orb orb--two" aria-hidden="true"></div>
+
+    <main class="app">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">LocalForge Coach</p>
+          <h1>Interview answers, forged locally.</h1>
+          <p class="lede">
+            Run the multi-step Ollama pipeline end-to-end, track progress per step,
+            and capture a polished response with a judge report.
+          </p>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card__title">Pipeline snapshot</div>
+          <div class="hero-card__grid">
+            <div>
+              <span>Steps</span>
+              <strong>6</strong>
+            </div>
+            <div>
+              <span>Retries</span>
+              <strong>0-5</strong>
+            </div>
+            <div>
+              <span>Runs</span>
+              <strong>In-memory</strong>
+            </div>
+            <div>
+              <span>Models</span>
+              <strong>Ollama</strong>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section class="layout">
+        <form id="run-form" class="panel panel--form">
+          <div class="panel__header">
+            <h2>Run setup</h2>
+            <p>Provide the interview prompt, job description, and resume context.</p>
+          </div>
+
+          <label class="field">
+            <span>Question</span>
+            <textarea id="question" rows="3" placeholder="Describe a time you led a distributed system project."></textarea>
+          </label>
+
+          <label class="field">
+            <span>Job description</span>
+            <textarea id="jd" rows="8" placeholder="Paste the role summary and requirements."></textarea>
+          </label>
+
+          <label class="field">
+            <span>Resume</span>
+            <textarea id="resume" rows="8" placeholder="Paste your resume or master summary."></textarea>
+          </label>
+
+          <label class="field">
+            <span>Custom prompt (optional)</span>
+            <input id="custom" type="text" placeholder="Keep the answer under 120 words." />
+          </label>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Model</span>
+              <input id="model" list="models" placeholder="e.g. llama3.1:8b" value="qwen3:4b" />
+              <datalist id="models"></datalist>
+              <small id="models-status">Loading models...</small>
+            </label>
+
+            <label class="field">
+              <span>Judge strictness: <strong id="strictness-value">3</strong></span>
+              <input id="strictness" type="range" min="1" max="5" value="3" />
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label class="field">
+              <span>Max retries: <strong id="retries-value">2</strong></span>
+              <input id="retries" type="range" min="0" max="5" value="2" />
+            </label>
+
+            <div class="field field--actions">
+              <button type="button" id="refresh-models" class="button button--ghost">Refresh models</button>
+              <button type="submit" class="button">Run pipeline</button>
+            </div>
+          </div>
+
+          <p class="note">
+            Prompts are read from <code>PROMPTS_DIR</code>. Ensure the local prompt files exist before running.
+          </p>
+        </form>
+
+        <aside class="panel panel--results">
+          <div class="panel__header">
+            <h2>Run output</h2>
+            <p id="run-status">Waiting for a run.</p>
+          </div>
+
+          <div class="run-meta">
+            <div>
+              <span>Run ID</span>
+              <strong id="run-id">--</strong>
+            </div>
+            <div>
+              <span>Status</span>
+              <strong id="run-state">--</strong>
+            </div>
+            <div>
+              <span>Attempt</span>
+              <strong id="run-attempt">--</strong>
+            </div>
+          </div>
+
+          <div class="panel__section">
+            <h3>Steps</h3>
+            <div id="steps" class="steps"></div>
+          </div>
+
+          <div class="panel__section">
+            <h3>Final answer</h3>
+            <pre id="final-output" class="output">--</pre>
+          </div>
+
+          <div class="panel__section">
+            <h3>Judge report</h3>
+            <div id="judge-report" class="judge">--</div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
